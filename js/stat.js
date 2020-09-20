@@ -19,9 +19,7 @@ const renderCloud = (ctx, x, y, color) => {
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
 
-const getRandomInt = (max) => {
-  return Math.floor(Math.random() * Math.floor(max));
-};
+const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
 const getMaxElement = (arr) => {
   let maxElement = arr[0];
@@ -38,7 +36,6 @@ const getMaxElement = (arr) => {
 const renderPlayerResults = (ctx, name, time, maxTime, index) => {
   let barHeight = MAX_BAR_HEIGHT * time / maxTime;
   let barColor = (name === `Вы`) ? PLAYER_COLOR : `hsla(240, ${getRandomInt(100)}%, 50%, 1)`;
-
 
   ctx.fillStyle = barColor;
   ctx.fillRect(CLOUD_X + 2 * GAP + (BAR_WIDTH + BAR_GAP) * index, SIGNATURE_Y - GAP / 2, BAR_WIDTH, -barHeight);
