@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const NAMES = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
 const SURNAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
 const COAT_COLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
@@ -15,12 +15,12 @@ const getRandomIndex = (arrayLength) => Math.floor(Math.random() * arrayLength);
 const generateWizardObject = () => {
   const wizardObject = {};
 
-  wizardObject.name = `${NAMES[getRandomIndex(NAMES.length)]} ${SURNAMES[getRandomIndex(SURNAMES.length)]}`,
+  wizardObject.name = `${NAMES[getRandomIndex(NAMES.length)]} ${SURNAMES[getRandomIndex(SURNAMES.length)]}`;
   wizardObject.coatColor = COAT_COLORS[getRandomIndex(COAT_COLORS.length)];
   wizardObject.eyesColor = EYES_COLORS[getRandomIndex(EYES_COLORS.length)];
 
   return wizardObject;
-}
+};
 
 const createWizardsArray = (wizardsAmount) => {
   const wizardsArray = [];
@@ -30,7 +30,7 @@ const createWizardsArray = (wizardsAmount) => {
   }
 
   return wizardsArray;
-}
+};
 
 const renderWizardElement = (wizard) => {
   const wizardElement = wizardItemTemplate.cloneNode(true);
@@ -40,7 +40,7 @@ const renderWizardElement = (wizard) => {
   wizardElement.querySelector(`.wizard-eyes`).style.fill = wizard.eyesColor;
 
   return wizardElement;
-}
+};
 
 const renderWizardsList = (wizardsList) => {
   const fragment = document.createDocumentFragment();
@@ -50,14 +50,9 @@ const renderWizardsList = (wizardsList) => {
   }
 
   similarWizardsList.appendChild(fragment);
-}
+};
 
 setupWindow.classList.remove(`hidden`);
 const wizardsList = createWizardsArray(WIZARDS_AMOUNT);
 renderWizardsList(wizardsList);
 setupSimilarList.classList.remove(`hidden`);
-
-
-
-
-
