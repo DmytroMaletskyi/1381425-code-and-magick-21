@@ -2,21 +2,21 @@
 
 window.GameConstants = {
   Fireball: {
-    size: window.fireballSize || 24,
-    speed: window.getFireballSpeed || function (movingLeft) {
+    size: window.params.fireballSize || 24,
+    speed: window.params.getFireballSpeed || function (movingLeft) {
       return movingLeft ? 2 : 5;
     }
   },
   Wizard: {
-    speed: window.wizardSpeed || 2,
-    width: window.wizardWidth || 61,
-    getHeight: window.getWizardHeight || function (width) {
+    speed: window.params.wizardSpeed || 2,
+    width: window.params.wizardWidth || 61,
+    getHeight: window.params.getWizardHeight || function (width) {
       return 1.377 * width;
     },
-    getX: window.getWizardX || function (width) {
+    getX: window.params.getWizardX || function (width) {
       return width / 3;
     },
-    getY: window.getWizardY || function (height) {
+    getY: window.params.getWizardY || function (height) {
       return height - 100;
     }
   }
@@ -443,10 +443,10 @@ window.Game = (function () {
       let message;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          if (window.renderStatistics) {
+          if (window.stat.renderStatistics) {
             let statistics = this._generateStatistics(new Date() - this.state.startTime);
             let keys = this._shuffleArray(Object.keys(statistics));
-            window.renderStatistics(this.ctx, keys, keys.map(function (it) {
+            window.stat.renderStatistics(this.ctx, keys, keys.map(function (it) {
               return statistics[it];
             }));
             return;
