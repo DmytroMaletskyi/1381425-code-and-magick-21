@@ -3,11 +3,7 @@
 (() => {
   const TIMEOUT = 10000;
 
-  const load = (onLoad, onError) => {
-    const URL = `https://21.javascript.pages.academy/code-and-magick/data`;
-
-    const xhr = new XMLHttpRequest();
-
+  const handleRequest = (xhr, onLoad, onError, timeout) => {
     xhr.responseType = `json`;
 
     xhr.addEventListener(`load`, () => {
@@ -46,7 +42,15 @@
       onError(`Запрос не успел выполниться за ${xhr.timeout}мс`);
     });
 
-    xhr.timeout = TIMEOUT;
+    xhr.timeout = timeout;
+  };
+
+  const load = (onLoad, onError) => {
+    const URL = `https://21.javascript.pages.academy/code-and-magick/data`;
+
+    const xhr = new XMLHttpRequest();
+
+    handleRequest(xhr, onLoad, onError, TIMEOUT);
 
     xhr.open(`GET`, URL);
     xhr.send();
@@ -57,45 +61,7 @@
 
     const xhr = new XMLHttpRequest();
 
-    xhr.responseType = `json`;
-
-    xhr.addEventListener(`load`, () => {
-      let error;
-      switch (xhr.status) {
-        case 200:
-          onLoad(xhr.response);
-          break;
-
-        case 400:
-          error = `Неверный запрос`;
-          break;
-
-        case 401:
-          error = `Пользователь не авторизирован`;
-          break;
-
-        case 404:
-          error = `Ничего не найдено`;
-          break;
-
-        default:
-          error = `Статус ответа: ${xhr.status} ${xhr.statusText}`;
-      }
-
-      if (error) {
-        onError(error);
-      }
-    });
-
-    xhr.addEventListener(`error`, () => {
-      onError(`Произошла ошибка соединения`);
-    });
-
-    xhr.addEventListener(`timeot`, () => {
-      onError(`Запрос не успел выполниться за ${xhr.timeout}мс`);
-    });
-
-    xhr.timeout = TIMEOUT;
+    handleRequest(xhr, onLoad, onError, TIMEOUT);
 
     xhr.open(`POST`, URL);
     xhr.send(data);
