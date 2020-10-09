@@ -61,6 +61,11 @@
     fireballColorField.value = randomFireballColor;
   };
 
+  const onFormSubmit = (evt) => {
+    window.backend.save(new FormData(setupWizardForm), closeSetupWindow, window.alert.renderAlert);
+    evt.preventDefault();
+  };
+
   setupOpenIcon.addEventListener(`click`, openSetupWindow);
   setupOpenIcon.addEventListener(`keydown`, onSetupIconEnterPress);
   setupCloseButton.addEventListener(`click`, closeSetupWindow);
@@ -68,4 +73,5 @@
   wizardCoat.addEventListener(`click`, changeCoatColor);
   wizardEyes.addEventListener(`click`, changeEyesColor);
   fireballWrapper.addEventListener(`click`, changeFireballColor);
+  setupWizardForm.addEventListener(`submit`, onFormSubmit);
 })();
