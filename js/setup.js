@@ -17,6 +17,9 @@
   const fireballWrapper = setupWizardForm.querySelector(`.setup-fireball-wrap`);
   const fireballColorField = setupWizardForm.querySelector(`input[name="fireball-color"]`);
 
+  let coatColor = COAT_COLORS[0];
+  let eyesColor = EYES_COLORS[0];
+
   const onPopupEscapePress = (evt) => {
     window.utils.isEscEvent(evt, window.utils.isElementFocused(nameInputField, closeSetupWindow));
   };
@@ -43,16 +46,24 @@
     document.removeEventListener(`keydown`, onPopupEscapePress);
   };
 
+  const onCoatColorChange = window.debounce(window.similarWizards.updateWizards);
+
   const changeCoatColor = () => {
-    const randomCoatColor = COAT_COLORS[window.utils.getRandomInt(COAT_COLORS.length)];
-    wizardCoat.style.fill = randomCoatColor;
-    coatColorField.value = randomCoatColor;
+    coatColor = COAT_COLORS[window.utils.getRandomInt(COAT_COLORS.length)];
+    window.setup.coatColor = coatColor;
+    wizardCoat.style.fill = coatColor;
+    coatColorField.value = coatColor;
+    onCoatColorChange();
   };
 
+  const onEyesColorChange = window.debounce(window.similarWizards.updateWizards);
+
   const changeEyesColor = () => {
-    const randomEyesColor = EYES_COLORS[window.utils.getRandomInt(EYES_COLORS.length)];
-    wizardEyes.style.fill = randomEyesColor;
-    eyesColorField.value = randomEyesColor;
+    eyesColor = EYES_COLORS[window.utils.getRandomInt(EYES_COLORS.length)];
+    window.setup.eyesColor = eyesColor;
+    wizardEyes.style.fill = eyesColor;
+    eyesColorField.value = eyesColor;
+    onEyesColorChange();
   };
 
   const changeFireballColor = () => {
@@ -74,4 +85,9 @@
   wizardEyes.addEventListener(`click`, changeEyesColor);
   fireballWrapper.addEventListener(`click`, changeFireballColor);
   setupWizardForm.addEventListener(`submit`, onFormSubmit);
+
+  window.setup = {
+    coatColor,
+    eyesColor
+  };
 })();
