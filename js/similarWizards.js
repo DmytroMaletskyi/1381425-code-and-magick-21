@@ -1,10 +1,6 @@
 'use strict';
 
 (() => {
-  /* const NAMES = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
-  const SURNAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
-  const COAT_COLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
-  const EYES_COLORS = [`black`, `red`, `blue`, `yellow`, `green`]; */
   const WIZARDS_AMOUNT = 4;
 
   const setupWindow = document.querySelector(`.setup`);
@@ -12,25 +8,7 @@
   const similarWizardsList = setupWindow.querySelector(`.setup-similar-list`);
   const setupSimilarList = setupWindow.querySelector(`.setup-similar`);
 
-  /*  const generateWizardObject = () => {
-    const wizardObject = {};
-
-    wizardObject.name = `${NAMES[window.utils.getRandomInt(NAMES.length)]} ${SURNAMES[window.utils.getRandomInt(SURNAMES.length)]}`;
-    wizardObject.coatColor = COAT_COLORS[window.utils.getRandomInt(COAT_COLORS.length)];
-    wizardObject.eyesColor = EYES_COLORS[window.utils.getRandomInt(EYES_COLORS.length)];
-
-    return wizardObject;
-  };
-
-  const createWizardsArray = (loadedWizards) => {
-    const wizardsArray = [];
-
-    for (let i = 0; i < WIZARDS_AMOUNT; i++) {
-      wizardsArray.push(loadedWizards.splice(window.utils.getRandomInt(loadedWizards.length) - i, 1)[0]);
-    }
-
-    return wizardsArray;
-  }; */
+  let wizards = [];
 
   const renderWizardElement = (wizard) => {
     const wizardElement = wizardItemTemplate.cloneNode(true);
@@ -42,16 +20,63 @@
     return wizardElement;
   };
 
+  const getRank = (wizard) => {
+    let rank = 0;
+
+    if (wizard.colorCoat === window.setup.coatColor) {
+      rank += 2;
+    }
+
+    if (wizard.colorEyes === window.setup.eyesColor) {
+      rank += 1;
+    }
+
+    return rank;
+  };
+
   const renderWizardsList = (wizardsList) => {
+    while (similarWizardsList.lastChild) {
+      similarWizardsList.removeChild(similarWizardsList.lastChild);
+    }
+
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < WIZARDS_AMOUNT; i++) {
-      fragment.appendChild(renderWizardElement(wizardsList.splice(window.utils.getRandomInt(wizardsList.length) - i, 1)[0]));
+      fragment.appendChild(renderWizardElement(wizardsList[i]));
     }
 
     similarWizardsList.appendChild(fragment);
   };
 
-  window.backend.load(renderWizardsList, window.alert.renderAlert);
+  const nameComparator = (current, next) => {
+    if (current > next) {
+      return 1;
+    } else if (current < next) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+
+  const updateWizards = () => {
+    renderWizardsList(wizards.sort((current, next) => {
+      let rankDiff = getRank(next) - getRank(current);
+      if (rankDiff === 0) {
+        rankDiff = nameComparator(current.name, next.name);
+      }
+      return rankDiff;
+    }));
+  };
+
+  const successHandler = (data) => {
+    wizards = data;
+    updateWizards();
+  };
+
+  window.backend.load(successHandler, window.alert.renderAlert);
   setupSimilarList.classList.remove(`hidden`);
+
+  window.similarWizards = {
+    updateWizards
+  };
 })();
